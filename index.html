@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Mariage Akthem & Amira</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Great+Vibes&family=Dancing+Script&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --pastel-gold: #e5cf92; 
+            --pastel-pink: #fce4ec; 
+            --pastel-blue: #e3f2fd; 
+            --pastel-text: #9b8a78; 
+            --border-pastel: #d7ccc8; 
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body, html {
+            width: 100%; height: 100%; 
+            display: flex; justify-content: center; align-items: center;
+            background: #fdfbf7;
+            font-family: 'Playfair Display', serif;
+            overflow: hidden; 
+            position: fixed;
+        }
+
+        #viewport {
+            position: relative; 
+            width: 90%; 
+            max-width: 600px; /* Augmenté pour le Web */
+            height: 100vh;
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+        }
+
+        /* Enveloppe Adaptable */
+        .envelope {
+            width: 100%; 
+            aspect-ratio: 3 / 2; /* Maintient la forme rectangulaire */
+            max-width: 500px; /* Taille max sur PC */
+            min-width: 280px; /* Taille min sur petit mobile */
+            background: #f5f5dc;
+            border-radius: 20px;
+            border: 2px solid var(--border-pastel); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            position: relative;
+            cursor: pointer;
+            z-index: 1;
+            transition: transform 0.4s ease;
+        }
+
+        .envelope:hover {
+            transform: scale(1.02);
+        }
+
+        .rabat {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 55%;
+            background: #fff;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            z-index: 2;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            border-top: 4px solid var(--border-pastel); 
+            transform-origin: top; 
+        }
+
+        .envelope.opened .rabat { transform: rotateX(180deg); }
+
+        .seal-container {
+            position: absolute;
+            top: 55%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: clamp(60px, 15vw, 90px); /* Taille de sceau fluide */
+            height: clamp(60px, 15vw, 90px);
+            border-radius: 50%;
+            background: var(--pastel-gold); 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 3;
+        }
+
+        .seal-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            color: #fff;
+        }
+
+        /* La carte d'invitation */
+        .carte {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.7);
+            width: 95%;
+            max-width: 400px;
+            background: #ffffff;
+            border-radius: 15px;
+            border: 1px solid var(--pastel-pink);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            padding: clamp(15px, 4vw, 30px);
+            display: none;
+            z-index: 10;
+            text-align: center;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .carte.show {
+            display: block;
+            animation: fadeIn 0.6s forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .title-gold-card {
+            font-family: 'Dancing Script', cursive;
+            color: var(--pastel-gold);
+            line-height: 1.2;
+        }
+
+        .photo-frame {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            max-height: 220px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+            border: 4px solid var(--pastel-blue); 
+        }
+
+        .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+        .btn {
+            display: inline-block;
+            background: var(--pastel-blue); 
+            color: #5c6bc0; 
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            border: 1px solid #c5cae9;
+        }
+    </style>
+</head>
+<body>
+
+<audio id="musiqueInv">
+    <source src="audio/musique.mp3" type="audio/mpeg">
+</audio>
+
+<div id="viewport">
+    <div class="envelope" id="envelope" onclick="ouvrirEnveloppe()">
+        <div class="rabat"></div>
+        <div class="seal-container">
+            <div class="seal-text">AA</div>
+        </div>
+    </div>
+
+    <div class="carte" id="carte">
+        <div class="title-gold-card" style="font-size: 2.2rem;">Invitation de mariage</div>
+        <div class="title-gold-card" style="font-size: 2rem;">Akthem & Amira</div>
+        
+        <p style="font-size: 0.95rem; color: var(--pastel-text); margin: 10px 0;">
+            C’est avec une immense joie que nous vous invitons à célébrer notre mariage, un moment d’amour, de partage et de bonheur.  
+        </p>
+        
+        <div class="photo-frame">
+            <img src="images/photo.jpg" alt="Photo des mariés">
+        </div>
+
+        <div style="border-top: 1px solid var(--pastel-gold); border-bottom: 1px solid var(--pastel-gold); padding: 10px 0; margin: 10px 0;">
+            <div class="title-gold-card" style="font-size: 1.6rem;">Samedi 28 Mars 2026</div>
+            <p style="font-size: 0.85rem; color: #777; font-family: 'Dancing Script', cursive;">À PARTIR DE 21H00</p>
+        </div>
+
+        <p style="font-size: 0.9rem; color: var(--pastel-text);">
+            <strong>Dar Bouraoui, Carthage</strong><br/>Tunis
+        </p>
+        
+        <a href="https://maps.google.com" target="_blank" class="btn">📍 VOIR LA CARTE</a>
+    </div>
+</div>
+
+<script>
+function ouvrirEnveloppe() {
+    const enveloppe = document.getElementById('envelope');
+    const carte = document.getElementById('carte');
+    const musique = document.getElementById('musiqueInv');
+
+    musique.play().catch(function(error) {
+        console.log("Interaction requise pour le son.");
+    });
+
+    enveloppe.classList.add('opened');
+    
+    setTimeout(() => {
+        enveloppe.style.opacity = "0";
+        enveloppe.style.pointerEvents = "none";
+        carte.classList.add('show');
+    }, 600);
+}
+</script>
+
+</body>
+</html>
